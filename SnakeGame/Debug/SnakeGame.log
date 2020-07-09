@@ -1,2 +1,5 @@
 ﻿  SnakeGame.cpp
+c:\users\viset\source\repos\snakegame\snakegame\snakegame.cpp(36): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\viset\source\repos\snakegame\snakegame\snakegame.cpp(85): warning C4553: '==': result of expression not used; did you intend '='?
+c:\users\viset\source\repos\snakegame\snakegame\snakegame.cpp(86): warning C4553: '==': result of expression not used; did you intend '='?
   SnakeGame.vcxproj -> C:\Users\viset\source\repos\SnakeGame\Debug\SnakeGame.exe

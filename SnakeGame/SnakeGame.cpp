@@ -10,35 +10,156 @@
 #include <unistd.h>
 #endif
 
+#include <time.h>
+#include <conio.h>
+
 using namespace std;
 
 //Global variables
-boolean gameOver = false;
-int width = 20, height = 20;
-int x, y, ballX, ballY;
-
+boolean gameOver;
+int width, height;
+int snakeX, snakeY, ballX, ballY;
+enum eMoveDirection {STOP, UP, DOWN, LEFT, RIGHT};
+eMoveDirection moveDirection;
+char key;
+int score;
+int snakeSize;
+int snakeBody[100][2];
 
 void setup() {
+	gameOver = false;
+	width = 60;
+	height = 20;
+	snakeX = width / 2;
+	snakeY = height / 2;
 
+	srand(time(NULL));
+	ballX = (rand() % (width-2))+1;
+	ballY = (rand() % (height-2))+1;
+
+	moveDirection = STOP;
+	score = 0;
+	snakeSize = 0;
 }
 
 void draw() {
-
+	for (int i = 0; i < height; i++) {
+		for (int j = 0; j < width; j++) {
+			// Draw edges
+			if (i == 0 || i == height - 1)
+				cout << "#";
+			else if (j == 0 || j == width - 1)
+				cout << "#";
+			else if (i == ballY && j == ballX)
+				cout << "W";
+			else if (i == snakeY && j == snakeX)
+				cout << "O";
+			else if (snakeSize > 0) {
+				//for (int k = 0; k < snakeSize; k++) {
+				//	if (i == snakeBody[k][1] && j == snakeBody[k][0]) {
+				//		cout << "o";
+				//		k = snakeSize;
+				//	}
+				//}
+				if (i == snakeBody[0][1] && j == snakeBody[0][0]) {
+					cout << "o";
+				}
+				else {
+					cout << " ";
+				}
+			}
+			else
+				cout << " ";
+		}
+		cout << endl;
+	}
 }
 
 void move() {
 
+	if (snakeSize > 0) {
+		//for (int i = 0; i < snakeSize; i++) {
+		//	snakeBody[i][0] == snakeX;
+		//	snakeBody[i][1] == snakeY;
+		//}
+		snakeBody[0][0] == snakeX;
+		snakeBody[0][1] == snakeY;
+		cout << "It when here" << endl;
+	}
+
+	key = _getch();
+	switch (key) {
+	case 'w':
+		moveDirection = UP;
+		break;
+	case 's':
+		moveDirection = DOWN;
+		break;
+	case 'a':
+		moveDirection = LEFT;
+		break;
+	case 'd':
+		moveDirection = RIGHT;
+		break;
+	}
+
+	switch (moveDirection) {
+	case UP:
+		snakeY--;
+		break;
+	case DOWN:
+		snakeY++;
+		break;
+	case LEFT:
+		snakeX--;
+		break;
+	case RIGHT:
+		snakeX++;
+		break;
+	}
 }
 
 void check() {
+	// Check if it hit the edge
+	if (snakeX == width-1)
+		snakeX = 1;
+	else if (snakeX == 0)
+		snakeX = width - 2;
+	else if (snakeY == height-1)
+		snakeY = 1;
+	else if (snakeY == 0)
+		snakeY = height - 2;
+	// Eat the ball
+	else if (snakeX == ballX && snakeY == ballY) {
+		score++;
+		snakeSize++;
 
+		// change ball location
+		ballX = (rand() % (width - 2)) + 1;
+		ballY = (rand() % (height - 2)) + 1;
+	}
+}
+
+
+
+void printReport() {
+	cout << "====|Game Status|====" << endl
+		<< "SnakeX: " << snakeX << " | SnakeY:" << snakeY << endl
+		<< "BallX: " << ballX << " | BallY: " << ballY << endl
+		<< "Score: " << score << "| Snake Size: " << snakeSize;
 }
 
 int main()
 {
-	for (int i = 0; i < 10; i++) {
+	//setup();
+	//draw();
+	setup();
+	for (int i = 0; i < 500; i++) {
 		system("cls");
-		cout << i << width << height << endl;
-		Sleep(1000);
+		draw();
+		printReport();
+		move();
+		check();
+		//Sleep(500);
 	}
 }
