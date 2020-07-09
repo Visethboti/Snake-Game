@@ -26,6 +26,8 @@ int score;
 int snakeSize;
 int snakeBody[100][2];
 
+boolean flag_draw_body;
+
 void setup() {
 	gameOver = false;
 	width = 60;
@@ -55,18 +57,16 @@ void draw() {
 			else if (i == snakeY && j == snakeX)
 				cout << "O";
 			else if (snakeSize > 0) {
-				//for (int k = 0; k < snakeSize; k++) {
-				//	if (i == snakeBody[k][1] && j == snakeBody[k][0]) {
-				//		cout << "o";
-				//		k = snakeSize;
-				//	}
-				//}
-				if (i == snakeBody[0][1] && j == snakeBody[0][0]) {
-					cout << "o";
+				flag_draw_body = false;
+				for (int k = 0; k < snakeSize; k++) {
+					if (i == snakeBody[k][1] && j == snakeBody[k][0]) {
+						cout << "o";
+						k = snakeSize;
+						flag_draw_body = true;
+					}
 				}
-				else {
+				if (!flag_draw_body)
 					cout << " ";
-				}
 			}
 			else
 				cout << " ";
@@ -76,15 +76,16 @@ void draw() {
 }
 
 void move() {
-
+	// Snake body
 	if (snakeSize > 0) {
-		//for (int i = 0; i < snakeSize; i++) {
-		//	snakeBody[i][0] == snakeX;
-		//	snakeBody[i][1] == snakeY;
-		//}
-		snakeBody[0][0] == snakeX;
-		snakeBody[0][1] == snakeY;
-		cout << "It when here" << endl;
+		if (snakeSize > 1) {
+			for (int i = snakeSize; i > 0; i--) {
+				snakeBody[i][0] = snakeBody[i-1][0];
+				snakeBody[i][1] = snakeBody[i-1][1];
+			}
+		}
+		snakeBody[0][0] = snakeX;
+		snakeBody[0][1] = snakeY;
 	}
 
 	key = _getch();
@@ -146,7 +147,11 @@ void printReport() {
 	cout << "====|Game Status|====" << endl
 		<< "SnakeX: " << snakeX << " | SnakeY:" << snakeY << endl
 		<< "BallX: " << ballX << " | BallY: " << ballY << endl
-		<< "Score: " << score << "| Snake Size: " << snakeSize;
+		<< "Score: " << score << "| Snake Size: " << snakeSize << endl;
+
+	for (int i = 0; i < snakeSize; i++) {
+		cout << i+1 << ">>>"<< snakeBody[i][0] << "-" << snakeBody[i][1] << endl;
+	}
 }
 
 int main()
