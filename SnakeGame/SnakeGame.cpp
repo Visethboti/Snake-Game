@@ -30,8 +30,8 @@ boolean flag_draw_body;
 
 void setup() {
 	gameOver = false;
-	width = 60;
-	height = 20;
+	width = 20;
+	height = 10;
 	snakeX = width / 2;
 	snakeY = height / 2;
 
@@ -139,6 +139,14 @@ void check() {
 		ballX = (rand() % (width - 2)) + 1;
 		ballY = (rand() % (height - 2)) + 1;
 	}
+	else if (snakeSize > 0) {
+		for (int k = 0; k < snakeSize; k++) {
+			if (snakeY == snakeBody[k][1] && snakeX == snakeBody[k][0]) {
+				gameOver = true;
+				k = snakeSize;
+			}
+		}
+	}
 }
 
 
@@ -159,12 +167,17 @@ int main()
 	//setup();
 	//draw();
 	setup();
-	for (int i = 0; i < 500; i++) {
+	while(!gameOver){
 		system("cls");
 		draw();
 		printReport();
 		move();
 		check();
-		//Sleep(500);
+		//Sleep(200);
 	}
+	system("cls");
+	cout	<< "||====================||"<< endl
+			<< "||**** Game Over! ****||" << endl
+			<< "||====================||" << endl << endl;
+	draw();
 }
