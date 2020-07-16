@@ -54,8 +54,12 @@ void draw() {
 				cout << "#";
 			else if (i == ballY && j == ballX)
 				cout << "W";
-			else if (i == snakeY && j == snakeX)
-				cout << "O";
+			else if (i == snakeY && j == snakeX) {
+				if(gameOver)
+					cout << "X";
+				else
+					cout << "O";
+			}
 			else if (snakeSize > 0) {
 				flag_draw_body = false;
 				for (int k = 0; k < snakeSize; k++) {
@@ -157,6 +161,7 @@ void printReport() {
 		<< "BallX: " << ballX << " | BallY: " << ballY << endl
 		<< "Score: " << score << "| Snake Size: " << snakeSize << endl;
 
+	// Debug snake body
 	for (int i = 0; i < snakeSize; i++) {
 		cout << i+1 << ">>>"<< snakeBody[i][0] << "-" << snakeBody[i][1] << endl;
 	}
@@ -164,20 +169,30 @@ void printReport() {
 
 int main()
 {
-	//setup();
-	//draw();
-	setup();
-	while(!gameOver){
+	char playAgain;
+	cout << "Welcome to my snake game, use WASD keys to move." << endl
+		<< "Press any button to continue...";
+	playAgain = _getch();
+
+	do {
+		setup();
+		while (!gameOver) {
+			system("cls");
+			draw();
+			printReport();
+			move();
+			check();
+			//Sleep(200);
+		}
 		system("cls");
-		draw();
-		printReport();
-		move();
-		check();
-		//Sleep(200);
-	}
-	system("cls");
-	cout	<< "||====================||"<< endl
+		cout << "||====================||" << endl
 			<< "||**** Game Over! ****||" << endl
 			<< "||====================||" << endl << endl;
-	draw();
+		draw();
+
+		cout << endl << "- Your score is " << score << endl << "Do you wish to play again? (Y to play again): ";
+		cin >> playAgain;
+	} while (playAgain == 'Y' || playAgain == 'y');
+
+	cout << "Thank you for playing my snake game!" << endl;
 }
